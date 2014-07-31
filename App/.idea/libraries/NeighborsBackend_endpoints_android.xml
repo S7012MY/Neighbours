@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="NeighborsBackend-endpoints-android">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/NeighborsBackend/build/libs/NeighborsBackend-endpoints-android.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
