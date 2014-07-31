@@ -6,6 +6,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.objectify/objectify/4.0b3/11f93a9e0ebfd010c72acbf85dfe48ac6ec2fa69/objectify-4.0b3-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.objectify/objectify/4.0b3/11f93a9e0ebfd010c72acbf85dfe48ac6ec2fa69/objectify-4.0b3-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
