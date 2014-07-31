@@ -8,8 +8,6 @@ import com.example.mymodule.neighborsbackend.registration.Registration;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -24,15 +22,8 @@ class GcmRegistrationAsyncTask extends AsyncTask<Context, Void, String> {
     private static final String SENDER_ID = "810467926240";
 
     public GcmRegistrationAsyncTask() {
-        Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                // Need setRootUrl and setGoogleClientRequestInitializer only for local testing, otherwise they can be skipped
-                .setRootUrl("http://10.0.2.2:8080/_ah/api/")
-                .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                    @Override
-                    public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                        abstractGoogleClientRequest.setDisableGZipContent(true);
-                    }
-                });
+        Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
+
         // end of optional local run code
 
         regService = builder.build();

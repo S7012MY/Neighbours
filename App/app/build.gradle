@@ -23,5 +23,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // You must install or update the Google Repository through the SDK manager to use this dependency.
     compile 'com.google.android.gms:play-services:3.1.+'
+    compile "com.android.support:support-v4:18.0.+"
     compile project(path: ':NeighborsBackend', configuration: 'android-endpoints')
 }
