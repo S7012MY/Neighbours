@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class GcmRegistrationAsyncTask extends AsyncTask<Context, Void, String> {
+public class GcmRegistrationAsyncTask extends AsyncTask<Context, Void, String> {
     private Registration regService;
     private GoogleCloudMessaging gcm;
     private Context context;

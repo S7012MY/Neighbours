@@ -5,7 +5,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.androidcamp.neighbors.GcmRegistrationAsyncTask;
 import com.androidcamp.neighbors.R;
+import com.example.mymodule.neighborsbackend.messaging.Messaging;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+
+import java.io.IOException;
 
 
 public class HomeActivity extends Activity {
@@ -15,6 +21,8 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         new GcmRegistrationAsyncTask().execute(this);
+        sendMsg();
+       // new GcmMessageAsyncTask().execute(this);
     }
 
 
@@ -36,4 +44,22 @@ public class HomeActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void sendMsg() {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
+        Messaging.Builder builder = new Messaging.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
+        Messaging endpoint = builder.build();
+                try {
+                    endpoint.messagingEndpoint().sendMessage("sad").execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t.start();
+            }
 }

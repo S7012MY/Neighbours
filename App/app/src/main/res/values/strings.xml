@@ -8,5 +8,6 @@
     <!--Login UI-->
     <string name="login_title">Log In</string>
     <string name="login_username_default">Username</string>
+    <string name="hello_world">Asdsa</string>
     <string name="login_password_default">Password</string>
 </resources>
