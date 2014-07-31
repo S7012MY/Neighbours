@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!-- App String -->
     <string name="app_name">Neighbors</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_login">LoginActivity</string>
 
+    <!--Login UI-->
+    <string name="login_title">Log In</string>
+    <string name="login_username_default">Username</string>
+    <string name="login_password_default">Password</string>
 </resources>

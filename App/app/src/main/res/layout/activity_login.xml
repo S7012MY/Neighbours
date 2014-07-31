@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/login_horizontal_margin"
+    android:paddingRight="@dimen/login_horizontal_margin"
+    android:paddingTop="@dimen/login_vertical_margin"
+    android:paddingBottom="@dimen/login_vertical_margin"
+    tools:context="com.androidcamp.neighbors.com.androidcamp.neighbors.ui.LoginActivity">
+
+    <TextView
+        android:id="@+id/login_title"
+        android:text="@string/login_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/login_title"/>
+
+    <EditText
+        android:id="@+id/login_username_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login_username_default"
+        android:layout_below="@+id/login_title"
+        />
+
+    <EditText
+        android:id="@+id/login_password_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login_username_default"
+        android:layout_below="@+id/login_username_edit_text"
+        android:inputType="textPassword"
+        />
+
+    <Button
+        android:id="@+id/login_login_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign in"
+        android:layout_below="@+id/login_password_edit_text"
+        android:layout_toRightOf=""/>
+
+</RelativeLayout>
