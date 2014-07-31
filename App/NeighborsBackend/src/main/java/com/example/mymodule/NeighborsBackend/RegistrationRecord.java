@@ -14,6 +14,9 @@ public class RegistrationRecord {
     @Index
     private String regId;
 
+    @Index
+    private String userId;
+
     // you can add more fields...
 
     public RegistrationRecord() {}
@@ -25,4 +28,8 @@ public class RegistrationRecord {
     public void setRegId(String regId) {
         this.regId = regId;
     }
+
+    public String getUserId(){ return userId;}
+
+    public void setUserId(String userId) { this.userId=userId; }
 }
