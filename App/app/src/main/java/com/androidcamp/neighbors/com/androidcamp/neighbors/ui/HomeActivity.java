@@ -1,9 +1,11 @@
-package com.androidcamp.neighbors;
+package com.androidcamp.neighbors.com.androidcamp.neighbors.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.androidcamp.neighbors.R;
 
 
 public class HomeActivity extends Activity {
