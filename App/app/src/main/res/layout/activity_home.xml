@@ -31,7 +31,11 @@
 
     </LinearLayout>
 
-
+    <fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/choose_bar"
+    />
 
     <TextView
         android:id="@+id/send_all_neighbours"
