@@ -1,19 +1,24 @@
 package com.androidcamp.neighbors;
 
 import android.content.Context;
+import android.location.Criteria;
 import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 
 /**
  * Created by demouser on 01/08/2014.
  */
 public class LocationHelper implements
         GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener {
+        GooglePlayServicesClient.OnConnectionFailedListener,
+        LocationListener
+{
     LocationClient mLocationClient;
     /*
      * Called by Location Services when the request to connect the
@@ -24,7 +29,14 @@ public class LocationHelper implements
     private boolean isConnected;
     @Override
     public void onConnected(Bundle dataBundle) {
+
         isConnected = true;
+        LocationRequest lr = new LocationRequest();
+        lr.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        lr.setInterval(5);
+        //lr.setFastestInterval()
+        lr.setNumUpdates(10);
+        mLocationClient.requestLocationUpdates(new LocationRequest(),this);
     }
 
     /*
@@ -39,6 +51,11 @@ public class LocationHelper implements
      * Called by Location Services if the attempt to
      * Location Services fails.
      */
+
+    public void removeLocationUpdates() {
+        mLocationClient.removeLocationUpdates(this);
+    }
+
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
     }
@@ -49,7 +66,8 @@ public class LocationHelper implements
          * handle callbacks.
          */
         mLocationClient = new LocationClient(context, this, this);
-        mLocationClient.connect();
+
+       // mlocationClient.;
     }
 
     public void onStart() {
@@ -64,8 +82,16 @@ public class LocationHelper implements
 
     public Location getLocation() {
         if (isConnected) {
+            if(mLocationClient.getLastLocation().getAccuracy()!= Criteria.ACCURACY_FINE)
+                return null;
             return mLocationClient.getLastLocation();
         }
         return null;
     }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
 }

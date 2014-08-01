@@ -20,6 +20,7 @@ public class RegistrationRecord {
     private double lat;
     private double lng;
 
+
     // you can add more fields...
 
     public RegistrationRecord() {}

@@ -5,14 +5,13 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.location.Location;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +24,6 @@ import com.androidcamp.neighbors.R;
 import com.androidcamp.neighbors.db.Conversation;
 import com.androidcamp.neighbors.db.Group;
 import com.androidcamp.neighbors.db.NeighboursContract;
-import com.androidcamp.neighbors.db.NeighboursDatabase;
 import com.androidcamp.neighbors.db.NeighboursDbHelper;
 import com.androidcamp.neighbors.db.User;
 import com.example.mymodule.neighborsbackend.messaging.Messaging;
@@ -37,8 +35,8 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class HomeActivity extends Activity implements
@@ -66,7 +64,22 @@ public class HomeActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        lh = new LocationHelper();
+        lh = new LocationHelper() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+                super.onLocationChanged(location);
+                Toast.makeText(HomeActivity.this,"Location Inaccurate"+ location.getAccuracy(),Toast.LENGTH_LONG).show();
+                if(location.getAccuracy() > 300) {
+                    return;
+
+                }
+
+                 double lat = location.getLatitude(), lng = location.getLongitude();
+                 removeLocationUpdates();
+                new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient), lat, lng).execute(HomeActivity.this);
+            }
+        };
         lh.onCreate(this);
         privateChatView = (TextView) findViewById(R.id.private_chat_list_title);
         sendToAll = (TextView) findViewById(R.id.send_all_neighbours);
@@ -207,14 +220,7 @@ public class HomeActivity extends Activity implements
 
         Toast.makeText(this, "User is connected!" + Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient), Toast.LENGTH_LONG).show();
 
-        //LocationClient mLocationClient = new LocationClient(this, this, this);
-        //mLocationClient.connect();
-        //Location l = mLocationClient.getLastLocation();
 
-        Location l = lh.getLocation();
-        double lat = l.getLatitude(), lng = l.getLongitude();
-
-        new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient), lat, lng).execute(this);
         //sendMsg();
         //TODO use the token to retrieve user's basic profile
 
