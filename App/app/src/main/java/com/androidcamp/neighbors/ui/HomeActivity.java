@@ -54,7 +54,22 @@ public class HomeActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        lh = new LocationHelper();
+        lh = new LocationHelper() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+                super.onLocationChanged(location);
+                Toast.makeText(HomeActivity.this,"Location Inaccurate"+ location.getAccuracy(),Toast.LENGTH_LONG).show();
+                if(location.getAccuracy() > 300) {
+                    return;
+
+                }
+
+                 double lat = location.getLatitude(), lng = location.getLongitude();
+                 removeLocationUpdates();
+                new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(mGoogleApiClient), lat, lng).execute(HomeActivity.this);
+            }
+        };
         lh.onCreate(this);
         groupView = (TextView) findViewById(R.id.groups_title);
         privateChatView = (TextView) findViewById(R.id.private_chat_title);
@@ -216,14 +231,13 @@ public class HomeActivity extends Activity implements
 
         Toast.makeText(this, "User is connected!" + Plus.AccountApi.getAccountName(mGoogleApiClient), Toast.LENGTH_LONG).show();
 
-        //LocationClient mLocationClient = new LocationClient(this, this, this);
-        //mLocationClient.connect();
-        //Location l = mLocationClient.getLastLocation();
 
-        Location l = lh.getLocation();
-        double lat = l.getLatitude(), lng = l.getLongitude();
-
-        new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(mGoogleApiClient), lat, lng).execute(this);
+//        Location l = lh.getLocation();
+//
+//
+//        double lat = l.getLatitude(), lng = l.getLongitude();
+//
+//        new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(mGoogleApiClient), lat, lng).execute(this);
         //sendMsg();
         //TODO use the token to retrieve user's basic profile
 

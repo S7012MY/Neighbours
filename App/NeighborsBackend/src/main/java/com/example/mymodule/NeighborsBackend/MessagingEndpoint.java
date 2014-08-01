@@ -69,7 +69,7 @@ public class MessagingEndpoint {
             message = message.substring(0, 1000) + "[...]";
         }
         Sender sender = new Sender(API_KEY);
-        Message msg = new Message.Builder().addData("user", user).addData( "message",user+ ": " + message + "!" ).build();
+        Message msg = new Message.Builder().addData("user", user).addData( "message",message).build();
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).list();
 
         RegistrationRecord from = null;
@@ -83,11 +83,16 @@ public class MessagingEndpoint {
 
         for(RegistrationRecord record : records) {
 
-            if(distance(from,record)>2.0) continue;
+            if(distance(from,record)>2.0) {
+                log.warning(String.valueOf(distance(from,record)));
+                log.fine(String.valueOf(distance(from,record)));
+                //log.warning("Mesage Not Sent!!!: " + message + " sent from" + from.getLat() + " " + from.getLng() + "to " + record.getLat() + " " + record.getLng() + " DISTANCE IS: " + distance(from,record));
+                continue;
+            }
             Result result = sender.send(msg, record.getRegId(), 5);
             if (result.getMessageId() != null) {
                 log.info("Message sent to " + record.getRegId());
-                log.warning("Mesage sent from" + from.getLat() + " " + from.getLng() + "to " + record.getLat() + " " + record.getLng() + "IS: " + distance(from,record));
+                log.warning("Mesage: " + message + " sent from" + from.getLat() + " " + from.getLng() + "to " + record.getLat() + " " + record.getLng() + "IS: " + distance(from,record));
                 String canonicalRegId = result.getCanonicalRegistrationId();
                 if (canonicalRegId != null) {
                     // if the regId changed, we have to update the datastore
@@ -124,13 +129,13 @@ public class MessagingEndpoint {
             message = message.substring(0, 1000) + "[...]";
         }
         Sender sender = new Sender(API_KEY);
-        Message msg = new Message.Builder().addData("user", user).addData( "message", message + "!" ).build();
+        Message msg = new Message.Builder().addData("user", user).addData( "message", message + "!" ).addData("target_user",targetUser).build();
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).list();
         for(RegistrationRecord record : records) {
             if(record.getUserId().toString().equals(targetUser)==false) continue;
             Result result = sender.send(msg, record.getRegId(), 5);
             if (result.getMessageId() != null) {
-                log.info("Message sent to " + record.getRegId());
+                log.info("Private Message sent to " + record.getRegId());
                 String canonicalRegId = result.getCanonicalRegistrationId();
                 if (canonicalRegId != null) {
                     // if the regId changed, we have to update the datastore
