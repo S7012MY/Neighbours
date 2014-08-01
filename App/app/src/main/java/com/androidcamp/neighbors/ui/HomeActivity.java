@@ -33,6 +33,7 @@ public class HomeActivity extends Activity implements
 
     /* Request code used to invoke sign in user interactions. */
     private static final int RC_SIGN_IN = 0;
+    private boolean isGroupSelected = true;
 
     /* Client used to interact with Google APIs. */
     private GoogleApiClient mGoogleApiClient;
@@ -69,6 +70,31 @@ public class HomeActivity extends Activity implements
                 .addApi(Plus.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
+
+
+        findViewById(R.id.groups_title).setOnClickListener(new View.OnClickListener() {
+            @Override
+        public void onClick(View v) {
+                if(v.getId() == R.id.groups_title && isGroupSelected) {
+                    // DO nothing
+                }
+                else {
+                    //TODO:inflate into user list
+                }
+            }
+        });
+
+        findViewById(R.id.private_chat_title).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v.getId() == R.id.private_chat_title && !isGroupSelected) {
+                    // DO nothing
+                }
+                else {
+                    //TODO:inflate into group list
+                }
+            }
+        });
 
 
       /*  findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
@@ -208,6 +234,11 @@ public class HomeActivity extends Activity implements
                 mGoogleApiClient.connect();
             }
         }
+    }
+
+    // add some raw data for testing
+    private void insertRawData() {
+        
     }
 
 }

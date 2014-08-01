@@ -23,6 +23,7 @@ public class NeighboursDbHelper extends SQLiteOpenHelper {
         db.execSQL(NeighboursContract.SQL_CREATE_USER_TABLE);
         db.execSQL(NeighboursContract.SQL_CREATE_GROUP_TABLE);
         db.execSQL(NeighboursContract.SQL_CREATE_CONVERSATION_TABLE);
+
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
