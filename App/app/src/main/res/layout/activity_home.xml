@@ -7,33 +7,6 @@
     <TextView
         android:id="@+id/private_chat_list_title"
         android:layout_width="match_parent"
-<<<<<<< HEAD
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
-        android:weightSum="2">
-
-        <TextView
-            android:id="@+id/groups_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:text="@string/groups"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/private_chat_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:text="@string/private_chats"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
-
-    <TextView
-=======
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:gravity="center"
@@ -53,7 +26,6 @@
         android:layout_below="@id/private_chat_list_title"/>
 
     <Button
->>>>>>> ui style
         android:id="@+id/send_all_neighbours"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
