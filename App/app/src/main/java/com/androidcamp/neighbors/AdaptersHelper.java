@@ -60,7 +60,9 @@ public class AdaptersHelper {
             return;
         }
         mPrivateAdapter.addMessage(userId, message);
-
+        Intent privateChat = new Intent(mPrivateAdapter.mActivity, mPrivateAdapter.mActivity.getClass());
+        privateChat.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        mPrivateAdapter.mActivity.startActivity(privateChat);
     }
 
 
@@ -109,8 +111,7 @@ public class AdaptersHelper {
                 message  = (TextView) convertView.findViewById(R.id.message_text);
             }
 
-            if (mOnClickSendIntent != null && userName != null
-                    && userName.equals(Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient))) {
+            if (mOnClickSendIntent != null && userName != null) {
                 convertView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -45,7 +45,7 @@ public class GcmIntentService extends IntentService {
                     AdaptersHelper.addBroadcastMessage(extras.getString("user"), msg);
                     Log.v(NeighbourApplication.LOG_TAG, "broadcast");
                 }
-                //showToast("[" + extras.getString("user") + "]: " + extras.getString("message"));
+                showToast("[" + extras.getString("user") + "]: " + extras.getString("message"));
             }
         }
         GcmBroadcastReceiver.completeWakefulIntent(intent);
