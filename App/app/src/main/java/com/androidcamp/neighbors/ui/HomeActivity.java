@@ -1,6 +1,8 @@
 package com.androidcamp.neighbors.ui;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
@@ -25,8 +27,8 @@ import java.io.IOException;
 public class HomeActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
 
-        GoogleApiClient.OnConnectionFailedListener
-
+        GoogleApiClient.OnConnectionFailedListener,
+        LoginDialog.SignInHandler
 {
 
     /* Request code used to invoke sign in user interactions. */
@@ -69,7 +71,7 @@ public class HomeActivity extends Activity implements
                 .build();
 
 
-        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+      /*  findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getId() == R.id.sign_in_button
@@ -79,9 +81,7 @@ public class HomeActivity extends Activity implements
                 }
             }
         });
-
-
-
+*/
     }
 
 
@@ -154,7 +154,8 @@ public class HomeActivity extends Activity implements
     private ConnectionResult mConnectionResult;
 
     /* A helper method to resolve the current ConnectionResult error. */
-    private void resolveSignInError() {
+    @Override
+    public void resolveSignInError() {
         if (mConnectionResult.hasResolution()) {
             try {
                 mIntentInProgress = true;
@@ -170,21 +171,15 @@ public class HomeActivity extends Activity implements
     }
 
     public void onConnectionFailed(ConnectionResult result) {
-        if (!mIntentInProgress) {
-            // Store the ConnectionResult so that we can use it later when the user clicks
-            // 'sign-in'.
-            mConnectionResult = result;
-
-            if (mSignInClicked) {
-                // The user has already clicked 'sign-in' so we attempt to resolve all
-                // errors until the user is signed in, or they cancel.
-                resolveSignInError();
-            }
-        }
+        new LoginDialog().show(getFragmentManager(), "HI");
     }
 
     @Override
     public void onConnected(Bundle connectionHint) {
+        Fragment loginDialog = getFragmentManager().findFragmentByTag("HI");
+        if (loginDialog != null) {
+            ((DialogFragment) loginDialog).dismiss();
+        }
         findViewById(R.id.sign_in_button).setVisibility(View.INVISIBLE);
 
         Toast.makeText(this, "User is connected!" + Plus.AccountApi.getAccountName(mGoogleApiClient), Toast.LENGTH_LONG).show();
