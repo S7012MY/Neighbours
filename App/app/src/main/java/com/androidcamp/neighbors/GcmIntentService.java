@@ -3,11 +3,10 @@ package com.androidcamp.neighbors;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
-import com.androidcamp.neighbors.ui.BroadcastChatActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.util.logging.Level;

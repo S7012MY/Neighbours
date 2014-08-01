@@ -20,7 +20,7 @@ public class SendingHelper {
                 Messaging.Builder builder = new Messaging.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
                 Messaging endpoint = builder.build();
                 try {
-                    endpoint.messagingEndpoint().sendMessage(message,//get user//"" ).execute();
+                    endpoint.messagingEndpoint().sendMessage(message,"get user" ).execute();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
