@@ -29,7 +29,7 @@ public class PrivateChatActivity extends ChatActivity {
             @Override
             public void onClick(View v) {
                 String message = messageEdit.getText().toString();
-                SendingHelper.sendMsg(message, userId);
+                SendingHelper.sendPrivateMsg(message, userId);
 
                 messagesList.invalidateViews();
                 Log.v(NeighbourApplication.LOG_TAG, "Message sent");
