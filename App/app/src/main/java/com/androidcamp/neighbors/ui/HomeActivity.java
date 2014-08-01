@@ -133,8 +133,8 @@ public class HomeActivity extends Activity implements
         Messaging.Builder builder = new Messaging.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
         Messaging endpoint = builder.build();
                 try {
-                    //endpoint.messagingEndpoint().sendMessage("sad", Plus.AccountApi.getAccountName(mGoogleApiClient)).execute();
-                    endpoint.messagingEndpoint().sendPrivateMessage("private",Plus.AccountApi.getAccountName(mGoogleApiClient),Plus.AccountApi.getAccountName(mGoogleApiClient)).execute();
+                    endpoint.messagingEndpoint().sendMessage("sad", Plus.AccountApi.getAccountName(mGoogleApiClient)).execute();
+                    //endpoint.messagingEndpoint().sendPrivateMessage("private",Plus.AccountApi.getAccountName(mGoogleApiClient),Plus.AccountApi.getAccountName(mGoogleApiClient)).execute();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
