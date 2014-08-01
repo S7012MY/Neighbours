@@ -18,6 +18,7 @@ public class ChatActivity extends Activity {
     protected EditText messageEdit;
     protected Button sendButton;
     protected ListView messagesList;
+    protected String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

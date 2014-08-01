@@ -3,6 +3,7 @@ package com.androidcamp.neighbors;
 import android.location.Location;
 
 import com.example.mymodule.neighborsbackend.messaging.Messaging;
+import com.google.android.gms.plus.Plus;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
@@ -25,6 +26,24 @@ public class SendingHelper {
                 } catch (IOException e) {
                     e.printStackTrace();
                     Location m;
+                }
+            }
+        });
+        t.start();
+    }
+
+    public static void sendPrivateMsg(final String message, final String userId) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
+                Messaging.Builder builder = new Messaging.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
+                Messaging endpoint = builder.build();
+                try {
+                    endpoint.messagingEndpoint().sendPrivateMessage("private", userId, userId).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });

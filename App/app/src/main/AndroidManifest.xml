@@ -27,6 +27,10 @@
             android:label="@string/label_broadcast_chat" >
         </activity>
 
+        <activity android:name=".ui.PrivateChatActivity"
+            android:label="@string/private_chat_title" >
+        </activity>
+
         <receiver
             android:name=".GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >

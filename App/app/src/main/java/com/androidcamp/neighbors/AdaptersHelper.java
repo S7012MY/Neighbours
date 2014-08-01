@@ -1,11 +1,14 @@
 package com.androidcamp.neighbors;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -17,7 +20,7 @@ public class AdaptersHelper {
 
     private static MessageListAdapter mBroadcastAdapter;
 
-    //private static MessageListAdapter mPrivateAdapters;
+    private static MessageListAdapter mPrivateAdapter;
 
     //private static MessageListAdapter mGroupAdapters;
 
@@ -26,33 +29,51 @@ public class AdaptersHelper {
         return mBroadcastAdapter;
     }
 
-    public static void createBroadcastAdapter(Activity activity, ListView parentView) {
-        AdaptersHelper.mBroadcastAdapter = new MessageListAdapter(activity, parentView);
+    public static void createBroadcastAdapter(Activity activity, ListView parentView, Intent onClickSendIntent) {
+        AdaptersHelper.mBroadcastAdapter = new MessageListAdapter(activity, onClickSendIntent);
         parentView.setAdapter(AdaptersHelper.mBroadcastAdapter);
     }
 
-    public static void addBroadcastMessage(String message) {
+    public static void addBroadcastMessage(String userId, String message) {
         if (mBroadcastAdapter == null) {
             Log.w(NeighbourApplication.LOG_TAG, "Received message but broadcast adapter is not initialized");
             return;
         }
-        mBroadcastAdapter.addMessage(message);
+        mBroadcastAdapter.addMessage(userId, message);
+
+    }
+
+    public static MessageListAdapter getPrivateAdapter() {
+        return mPrivateAdapter;
+    }
+
+    public static void createPrivateAdapter(Activity activity, ListView parentView) {
+        AdaptersHelper.mPrivateAdapter = new MessageListAdapter(activity, null);
+        parentView.setAdapter(AdaptersHelper.mPrivateAdapter);
+    }
+
+    public static void addPrivateMessage(String userId, String message) {
+        if (mPrivateAdapter == null) {
+            Log.w(NeighbourApplication.LOG_TAG, "Received message but private adapter is not initialized");
+            return;
+        }
+        mPrivateAdapter.addMessage(userId, message);
 
     }
 
 
     public static class MessageListAdapter extends BaseAdapter {
 
-        private ArrayList<String> messages;
+        private ArrayList<Message> messages;
 
         private Activity mActivity;
 
-        private ListView mParentView;
+        private Intent mOnClickSendIntent;
 
-        private MessageListAdapter(Activity activity, ListView listView) {
-            messages = new ArrayList<String>();
+        private MessageListAdapter(Activity activity, Intent onClickSendIntent) {
+            messages = new ArrayList<Message>();
             mActivity = activity;
-            mParentView = listView;
+            mOnClickSendIntent = onClickSendIntent;
         }
 
         @Override
@@ -72,29 +93,70 @@ public class AdaptersHelper {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            TextView textView;
-            if (convertView == null || !(convertView instanceof TextView)) {
-                textView = (TextView) mActivity.getLayoutInflater().inflate(R.layout.message_view, parent, false);
+            final TextView userName;
+            TextView message;
+            if (convertView == null) {
+                convertView = mActivity.getLayoutInflater().inflate(R.layout.message_view, parent, false);
+                userName = (TextView) convertView.findViewById(R.id.user_name);
+                message  = (TextView) convertView.findViewById(R.id.message_text);
+                if (mOnClickSendIntent != null) {
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mOnClickSendIntent);
+                            intent.putExtra("user_id", userName.getText().toString());
+                            mActivity.startActivity(intent);
+                        }
+                    });
+                }
             } else {
                 if (Integer.valueOf(position).equals(convertView.getTag())) {
                     return convertView;
                 }
-                textView = (TextView) convertView;
+                userName = (TextView) convertView.findViewById(R.id.user_name);
+                message  = (TextView) convertView.findViewById(R.id.message_text);
             }
 
-            textView.setText(messages.get(position));
-            textView.setTag(Integer.valueOf(position));
-            return textView;
+            userName.setText(messages.get(position).getUserName());
+            message.setText(messages.get(position).getMessageText());
+            message.setTag(Integer.valueOf(position));
+            return convertView;
         }
 
-        private void addMessage(String msg) {
-            messages.add(msg);
+        private void addMessage(String user, String msg) {
+            messages.add(new Message(user, msg));
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     notifyDataSetChanged();
                 }
             });
+        }
+    }
+
+    public static class Message {
+        private String mUserName;
+        private String mMessageText;
+
+        public Message(String userName, String messageText) {
+            mUserName = userName;
+            mMessageText = messageText;
+        }
+
+        public String getUserName() {
+            return mUserName;
+        }
+
+        public void setUserName(String userName) {
+            this.mUserName = userName;
+        }
+
+        public String getMessageText() {
+            return mMessageText;
+        }
+
+        public void setMessageText(String messageText) {
+            this.mMessageText = messageText;
         }
     }
 }
