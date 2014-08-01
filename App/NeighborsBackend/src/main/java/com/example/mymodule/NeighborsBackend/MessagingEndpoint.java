@@ -132,10 +132,11 @@ public class MessagingEndpoint {
         Message msg = new Message.Builder().addData("user", user).addData( "message", message + "!" ).addData("target_user",targetUser).build();
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).list();
         for(RegistrationRecord record : records) {
-            if(record.getUserId().toString().equals(targetUser)==false) continue;
+            if(record.getUserId().toString().equals(targetUser)==false && record.getUserId().toString().equals(user)==false) continue;
             Result result = sender.send(msg, record.getRegId(), 5);
             if (result.getMessageId() != null) {
                 log.info("Private Message sent to " + record.getRegId());
+                log.warning("Sent by: "+ user + "to " + targetUser);
                 String canonicalRegId = result.getCanonicalRegistrationId();
                 if (canonicalRegId != null) {
                     // if the regId changed, we have to update the datastore
