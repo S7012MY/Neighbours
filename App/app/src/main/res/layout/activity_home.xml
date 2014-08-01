@@ -1,12 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:background="#F6DED4">
 
-    <LinearLayout
-        android:id="@+id/choose_bar"
-        android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/private_chat_list_title"
         android:layout_width="match_parent"
+<<<<<<< HEAD
         android:orientation="horizontal"
         android:layout_alignParentTop="true"
         android:weightSum="2">
@@ -32,23 +33,46 @@
     </LinearLayout>
 
     <TextView
+=======
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:text="@string/private_chats"
+        android:textColor="#FF741C"
+        android:padding="10dp"
+        android:textStyle="bold"
+        android:textSize="20dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+        android:id="@+id/separator"
+        android:visibility="visible"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@id/private_chat_list_title"/>
+
+    <Button
+>>>>>>> ui style
         android:id="@+id/send_all_neighbours"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Notify neighbours"
+        android:text="Notify all neighbours"
         android:layout_alignParentBottom="true"
+        android:background="@drawable/button_violet"
+        android:layout_margin="3dp"
+        android:shadowColor="#000000"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
         />
 
-    <LinearLayout
-        android:id="@+id/main_list"
+    <ListView
+        android:id="@+id/conversation_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_below="@id/choose_bar"
-        android:layout_above="@id/send_all_neighbours">
-    </LinearLayout>
-
-
+        android:layout_below="@id/private_chat_list_title"
+        android:layout_above="@id/send_all_neighbours"/>
 
 </RelativeLayout>

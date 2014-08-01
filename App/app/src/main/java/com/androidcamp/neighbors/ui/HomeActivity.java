@@ -11,11 +11,16 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidcamp.neighbors.AdaptersHelper;
 import com.androidcamp.neighbors.GcmRegistrationAsyncTask;
 import com.androidcamp.neighbors.LocationHelper;
+import com.androidcamp.neighbors.NeighbourApplication;
 import com.androidcamp.neighbors.R;
 import com.androidcamp.neighbors.db.Conversation;
 import com.androidcamp.neighbors.db.Group;
@@ -33,6 +38,7 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.ArrayList;
 
 
 public class HomeActivity extends Activity implements
@@ -45,9 +51,6 @@ public class HomeActivity extends Activity implements
     /* Request code used to invoke sign in user interactions. */
     private static final int RC_SIGN_IN = 0;
     private boolean isGroupSelected = true;
-
-    /* Client used to interact with Google APIs. */
-    private GoogleApiClient mGoogleApiClient;
     //private PlusClient mPlusClient;
 
     /* A flag indicating that a PendingIntent is in progress and prevents
@@ -55,9 +58,9 @@ public class HomeActivity extends Activity implements
      */
     private boolean mIntentInProgress;
 
-    private TextView groupView;
     private TextView privateChatView;
     private TextView sendToAll;
+    private ListView conversationList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,19 +68,19 @@ public class HomeActivity extends Activity implements
         setContentView(R.layout.activity_home);
         lh = new LocationHelper();
         lh.onCreate(this);
-        groupView = (TextView) findViewById(R.id.groups_title);
-        privateChatView = (TextView) findViewById(R.id.private_chat_title);
+        privateChatView = (TextView) findViewById(R.id.private_chat_list_title);
         sendToAll = (TextView) findViewById(R.id.send_all_neighbours);
+        conversationList = (ListView) findViewById(R.id.conversation_list);
         sendToAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, BroadcastChatActivity.class);
-                intent.putExtra("user_id", Plus.AccountApi.getAccountName(mGoogleApiClient));
+                intent.putExtra("user_id",Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient));
                 startActivity(intent);
             }
         });
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        NeighbourApplication.sGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(Plus.API)
@@ -85,36 +88,14 @@ public class HomeActivity extends Activity implements
                 .build();
 
 
-        findViewById(R.id.groups_title).setOnClickListener(new View.OnClickListener() {
-            @Override
-        public void onClick(View v) {
-                if(v.getId() == R.id.groups_title && isGroupSelected) {
-                    // DO nothing
-                }
-                else {
-                    //TODO:inflate into user list
-                }
-            }
-        });
-
-        findViewById(R.id.private_chat_title).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(v.getId() == R.id.private_chat_title && !isGroupSelected) {
-                    // DO nothing
-                }
-                else {
-                    //TODO:inflate into group list
-                }
-            }
-        });
+        conversationList.setAdapter(new ChatListAdapter(this));
 
 
       /*  findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getId() == R.id.sign_in_button
-                        && !mGoogleApiClient.isConnecting()) {
+                        && !NeighbourApplication.sGoogleApiClient.isConnecting()) {
                     mSignInClicked = true;
                     resolveSignInError();
                 }
@@ -128,7 +109,7 @@ public class HomeActivity extends Activity implements
     protected void onStart() {
         super.onStart();
         lh.onStart();
-        mGoogleApiClient.connect();
+        NeighbourApplication.sGoogleApiClient.connect();
     }
 
     @Override
@@ -140,8 +121,9 @@ public class HomeActivity extends Activity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
+
+        if (NeighbourApplication.sGoogleApiClient.isConnected()) {
+            NeighbourApplication.sGoogleApiClient.disconnect();
         }
     }
 
@@ -173,8 +155,8 @@ public class HomeActivity extends Activity implements
                 Messaging.Builder builder = new Messaging.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
                 Messaging endpoint = builder.build();
                 try {
-                    //endpoint.messagingEndpoint().sendMessage("sad", Plus.AccountApi.getAccountName(mGoogleApiClient)).execute();
-                    endpoint.messagingEndpoint().sendPrivateMessage("private", Plus.AccountApi.getAccountName(mGoogleApiClient), Plus.AccountApi.getAccountName(mGoogleApiClient)).execute();
+                    //endpoint.messagingEndpoint().sendMessage("sad", Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient)).execute();
+                    endpoint.messagingEndpoint().sendPrivateMessage("private",Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient),Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient)).execute();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -205,7 +187,7 @@ public class HomeActivity extends Activity implements
                 // The intent was canceled before it was sent.  Return to the default
                 // state and attempt to connect to get an updated ConnectionResult.
                 mIntentInProgress = false;
-                mGoogleApiClient.connect();
+                NeighbourApplication.sGoogleApiClient.connect();
             }
         }
     }
@@ -223,7 +205,7 @@ public class HomeActivity extends Activity implements
             ((DialogFragment) loginDialog).dismiss();
         }
 
-        Toast.makeText(this, "User is connected!" + Plus.AccountApi.getAccountName(mGoogleApiClient), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "User is connected!" + Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient), Toast.LENGTH_LONG).show();
 
         //LocationClient mLocationClient = new LocationClient(this, this, this);
         //mLocationClient.connect();
@@ -232,7 +214,7 @@ public class HomeActivity extends Activity implements
         Location l = lh.getLocation();
         double lat = l.getLatitude(), lng = l.getLongitude();
 
-        new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(mGoogleApiClient), lat, lng).execute(this);
+        new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient), lat, lng).execute(this);
         //sendMsg();
         //TODO use the token to retrieve user's basic profile
 
@@ -251,8 +233,8 @@ public class HomeActivity extends Activity implements
 
             mIntentInProgress = false;
 
-            if (!mGoogleApiClient.isConnecting()) {
-                mGoogleApiClient.connect();
+            if (!NeighbourApplication.sGoogleApiClient.isConnecting()) {
+                NeighbourApplication.sGoogleApiClient.connect();
             }
         }
     }
@@ -289,6 +271,29 @@ public class HomeActivity extends Activity implements
                     null);
         }
         myDatabase.close();
+    }
+
+    public static class ChatListAdapter extends AdaptersHelper.MessageListAdapter {
+
+
+        private ArrayList<AdaptersHelper.Message> messages;
+
+        private Activity mActivity;
+
+        private Intent mOnClickSendIntent;
+
+        private ChatListAdapter(Activity activity) {
+            super(activity, new Intent(activity, PrivateChatActivity.class));
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View resultView = super.getView(position, convertView, parent);
+            TextView messageText = (TextView) resultView.findViewById(R.id.message_text);
+            messageText.setMaxLines(1);
+            return resultView;
+        }
+
     }
 
 }
