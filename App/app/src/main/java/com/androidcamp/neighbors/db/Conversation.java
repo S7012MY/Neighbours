@@ -76,7 +76,7 @@ public class Conversation implements ContentValuesTransformer{
     }
 
     @Override
-    public Object fromContentValues(ContentValues contentValues) {
+    public Conversation fromContentValues(ContentValues contentValues) {
         this.mConversationID = contentValues.getAsString(NeighboursContract.ConversationEntry.COLUMN_NAME_ENTRY_ID);
         this.mTime = ConversionHelper.getTimestampFromString(contentValues.getAsString(NeighboursContract.ConversationEntry.COLUMN_NAME_TIME));
         this.mIsGroup = contentValues.getAsBoolean(NeighboursContract.ConversationEntry.COLUMN_NAME_IS_GROUP);

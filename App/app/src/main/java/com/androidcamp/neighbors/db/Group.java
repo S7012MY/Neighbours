@@ -59,7 +59,7 @@ public class Group implements ContentValuesTransformer{
     }
 
     @Override
-    public Object fromContentValues(ContentValues contentValues) {
+    public Group fromContentValues(ContentValues contentValues) {
         this.mGroupID = contentValues.getAsString(NeighboursContract.GroupEntry.COLUMN_NAME_ENTRY_ID);
         this.mName = contentValues.getAsString(NeighboursContract.GroupEntry.COLUMN_NAME_NAME);
         this.mLocation = contentValues.getAsString(NeighboursContract.GroupEntry.COLUMN_NAME_LOCATION);
