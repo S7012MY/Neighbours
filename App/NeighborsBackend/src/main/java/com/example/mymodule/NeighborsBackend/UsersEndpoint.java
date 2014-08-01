@@ -17,6 +17,6 @@ public class UsersEndpoint {
     private static final Logger log = Logger.getLogger(UsersEndpoint.class.getName());
     @ApiMethod(name = "get_users")
     public void getUsers(@Named("userId") String userId) {
-        ofy().load
+
     }
 }

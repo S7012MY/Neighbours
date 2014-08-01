@@ -21,12 +21,16 @@ public class GcmRegistrationAsyncTask extends AsyncTask<Context, Void, String> {
     // TODO: change to your own sender ID to Google Developers Console project number, as per instructions above
     private static final String SENDER_ID = "810467926240";
     private String uName;
+    private double latitude;
+    private double longitude;
 
-    public GcmRegistrationAsyncTask(String name) {
+    public GcmRegistrationAsyncTask(String name, double lat, double lng) {
         Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
 
         // end of optional local run code
         uName = name;
+        latitude = lat;
+        longitude = lng;
         regService = builder.build();
     }
 
@@ -46,7 +50,7 @@ public class GcmRegistrationAsyncTask extends AsyncTask<Context, Void, String> {
             // so it can use GCM/HTTP or CCS to send messages to your app.
             // The request to your server should be authenticated if your app
             // is using accounts.
-            regService.register(regId, uName,0.0,0.0).execute();
+            regService.register(regId, uName,latitude,longitude).execute();
 
         } catch (IOException ex) {
             ex.printStackTrace();

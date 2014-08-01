@@ -26,6 +26,29 @@ import static com.example.mymodule.NeighborsBackend.OfyService.ofy;
  */
 @Api(name = "messaging", version = "v1", namespace = @ApiNamespace(ownerDomain = "NeighborsBackend.mymodule.example.com", ownerName = "NeighborsBackend.mymodule.example.com", packagePath=""))
 public class MessagingEndpoint {
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
+    }
+
+    private double distance(RegistrationRecord A, RegistrationRecord B) {
+        double lat1 = A.getLat(),lat2 = B.getLat();
+        double lon1 = A.getLng(),lon2 = B.getLng();
+
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        dist = dist * 1.609344;
+
+        return (dist);
+    }
+
     private static final Logger log = Logger.getLogger(MessagingEndpoint.class.getName());
 
     /** Api Keys can be obtained from the google cloud console */
@@ -49,16 +72,22 @@ public class MessagingEndpoint {
         Message msg = new Message.Builder().addData("user", user).addData( "message",user+ ": " + message + "!" ).build();
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).list();
 
-        RegistrationRecord from;
+        RegistrationRecord from = null;
         for(RegistrationRecord record : records) {
-
+            if(record.getUserId().toString().equals(user)==true) {
+                from = record;
+                break;
+            }
         }
 
 
         for(RegistrationRecord record : records) {
+
+            if(distance(from,record)>2.0) continue;
             Result result = sender.send(msg, record.getRegId(), 5);
             if (result.getMessageId() != null) {
                 log.info("Message sent to " + record.getRegId());
+                log.warning("Mesage sent from" + from.getLat() + " " + from.getLng() + "to " + record.getLat() + " " + record.getLng() + "IS: " + distance(from,record));
                 String canonicalRegId = result.getCanonicalRegistrationId();
                 if (canonicalRegId != null) {
                     // if the regId changed, we have to update the datastore

@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidcamp.neighbors.GcmRegistrationAsyncTask;
+import com.androidcamp.neighbors.LocationHelper;
 import com.androidcamp.neighbors.R;
 import com.example.mymodule.neighborsbackend.messaging.Messaging;
 import com.google.android.gms.common.ConnectionResult;
@@ -26,10 +28,10 @@ import java.io.IOException;
 
 public class HomeActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
-
         GoogleApiClient.OnConnectionFailedListener,
         LoginDialog.SignInHandler
 {
+    LocationHelper lh;
 
     /* Request code used to invoke sign in user interactions. */
     private static final int RC_SIGN_IN = 0;
@@ -51,6 +53,8 @@ public class HomeActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        lh = new LocationHelper();
+        lh.onCreate(this);
         groupView = (TextView) findViewById(R.id.groups_title);
         privateChatView = (TextView) findViewById(R.id.private_chat_title);
         sendToAll = (TextView) findViewById(R.id.send_all_neighbours);
@@ -58,7 +62,7 @@ public class HomeActivity extends Activity implements
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, BroadcastChatActivity.class);
-                intent.putExtra("user_id",Plus.AccountApi.getAccountName(mGoogleApiClient));
+                intent.putExtra("user_id", Plus.AccountApi.getAccountName(mGoogleApiClient));
                 startActivity(intent);
             }
         });
@@ -88,18 +92,19 @@ public class HomeActivity extends Activity implements
     @Override
     protected void onStart() {
         super.onStart();
+        lh.onStart();
         mGoogleApiClient.connect();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        lh.onStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
@@ -130,11 +135,11 @@ public class HomeActivity extends Activity implements
             public void run() {
 
 
-        Messaging.Builder builder = new Messaging.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
-        Messaging endpoint = builder.build();
+                Messaging.Builder builder = new Messaging.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
+                Messaging endpoint = builder.build();
                 try {
-                    endpoint.messagingEndpoint().sendMessage("sad", Plus.AccountApi.getAccountName(mGoogleApiClient)).execute();
-                    //endpoint.messagingEndpoint().sendPrivateMessage("private",Plus.AccountApi.getAccountName(mGoogleApiClient),Plus.AccountApi.getAccountName(mGoogleApiClient)).execute();
+                    //endpoint.messagingEndpoint().sendMessage("sad", Plus.AccountApi.getAccountName(mGoogleApiClient)).execute();
+                    endpoint.messagingEndpoint().sendPrivateMessage("private", Plus.AccountApi.getAccountName(mGoogleApiClient), Plus.AccountApi.getAccountName(mGoogleApiClient)).execute();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -154,7 +159,7 @@ public class HomeActivity extends Activity implements
     private ConnectionResult mConnectionResult;
 
     /* A helper method to resolve the current ConnectionResult error. */
-    @Override
+    //
     public void resolveSignInError() {
         if (mConnectionResult.hasResolution()) {
             try {
@@ -170,6 +175,7 @@ public class HomeActivity extends Activity implements
         }
     }
 
+    @Override
     public void onConnectionFailed(ConnectionResult result) {
         mConnectionResult = result;
         new LoginDialog().show(getFragmentManager(), "HI");
@@ -184,9 +190,15 @@ public class HomeActivity extends Activity implements
 
         Toast.makeText(this, "User is connected!" + Plus.AccountApi.getAccountName(mGoogleApiClient), Toast.LENGTH_LONG).show();
 
+        //LocationClient mLocationClient = new LocationClient(this, this, this);
+        //mLocationClient.connect();
+        //Location l = mLocationClient.getLastLocation();
 
-        new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(mGoogleApiClient)).execute(this);
+        Location l = lh.getLocation();
+        double lat = l.getLatitude(), lng = l.getLongitude();
 
+        new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(mGoogleApiClient), lat, lng).execute(this);
+        //sendMsg();
         //TODO use the token to retrieve user's basic profile
 
     }
@@ -208,6 +220,9 @@ public class HomeActivity extends Activity implements
                 mGoogleApiClient.connect();
             }
         }
+    }
+
+    public void onDisconnected() {
     }
 
 }
