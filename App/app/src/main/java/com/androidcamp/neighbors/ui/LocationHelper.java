@@ -19,6 +19,7 @@ public class LocationHelper implements
         GooglePlayServicesClient.OnConnectionFailedListener,
         LocationListener
 {
+    public boolean goodLocation = false;
     LocationClient mLocationClient;
     /*
      * Called by Location Services when the request to connect the

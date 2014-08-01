@@ -209,6 +209,7 @@ public class HomeActivity extends Activity implements
         lh = new LocationHelper() {
             @Override
             public void onLocationChanged(Location location) {
+                if(goodLocation) return;
 
                 super.onLocationChanged(location);
                 Toast.makeText(HomeActivity.this,"Location Inaccurate"+ location.getAccuracy(),Toast.LENGTH_LONG).show();
@@ -216,7 +217,7 @@ public class HomeActivity extends Activity implements
                     return;
 
                 }
-
+                goodLocation = true;
                 double lat = location.getLatitude(), lng = location.getLongitude();
                 removeLocationUpdates();
                 new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient), lat, lng).execute(HomeActivity.this);
