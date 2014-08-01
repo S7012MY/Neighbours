@@ -13,7 +13,7 @@ public class LoginDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
-        //blah blah blah
+        b.setCancelable(false);
         LayoutInflater i = getActivity().getLayoutInflater();
         View view = i.inflate(R.layout.fragment_sign_up, null);
         // Now use view.FindViewById() to do what you want
