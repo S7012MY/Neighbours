@@ -1,4 +1,4 @@
-package com.androidcamp.neighbors.com.androidcamp.neighbors.ui;
+package com.androidcamp.neighbors;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,19 +6,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.androidcamp.neighbors.R;
 
-public class LoginActivity extends Activity {
+public class group_profile extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_group_profile);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.login, menu);
+        getMenuInflater().inflate(R.menu.group_profile, menu);
         return true;
     }
 

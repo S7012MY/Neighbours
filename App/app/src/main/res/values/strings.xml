@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- App String -->
     <string name="app_name">Neighbors</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">login</string>
 
-    <!--Login UI-->
+    <!-- Login UI -->
     <string name="login_title">Log In</string>
     <string name="login_username_default">Username</string>
-    <string name="hello_world">Asdsa</string>
     <string name="login_password_default">Password</string>
+    <string name="title_activity_activity_sign_in">activity_sign_in</string>
+    <string name="hello_world">Hello world!</string>
+
+    <!-- Home Activity -->
+    <string name="groups">Groups</string>
+    <string name="private_chats">Private chats</string>
+    <string name="title_activity_group_profile">group_profile</string>
+    <string name="title_activity_user_profile">user_profile</string>
+
+    <!-- Chat room -->
+    <string name="message_hint">Type a message</string>
+    <string name="send">Send</string>
+
+    <string name="label_broadcast_chat">Broadcast chat</string>
+    <string name="broadcast_chat_title">Send message to everyone in the neighbourhood.</string>
+
 </resources>

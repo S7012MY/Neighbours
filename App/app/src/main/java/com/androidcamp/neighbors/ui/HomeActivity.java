@@ -1,4 +1,4 @@
-package com.androidcamp.neighbors.com.androidcamp.neighbors.ui;
+package com.androidcamp.neighbors.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import com.androidcamp.neighbors.GcmRegistrationAsyncTask;
 import com.androidcamp.neighbors.R;
@@ -40,10 +41,24 @@ public class HomeActivity extends Activity implements
      */
     private boolean mIntentInProgress;
 
+    private TextView groupView;
+    private TextView privateChatView;
+    private TextView sendToAll;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        groupView = (TextView) findViewById(R.id.groups_title);
+        privateChatView = (TextView) findViewById(R.id.private_chat_title);
+        sendToAll = (TextView) findViewById(R.id.send_all_neighbours);
+        sendToAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, BroadcastChatActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)

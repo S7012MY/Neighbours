@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".com.androidcamp.neighbors.ui.HomeActivity"
+            android:name=".ui.HomeActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,20 +19,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".com.androidcamp.neighbors.ui.LoginActivity"
+            android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login" >
         </activity>
+        <activity
+            android:name=".ui.BroadcastChatActivity"
+            android:label="@string/label_broadcast_chat" >
+        </activity>
+
         <receiver
             android:name=".GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.androidcamp.neighbors" />
             </intent-filter>
         </receiver>
+
         <service android:name=".GcmIntentService" />
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+
     </application>
 
     <permission
