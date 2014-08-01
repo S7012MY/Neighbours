@@ -92,7 +92,7 @@ public class MessagingEndpoint {
             Result result = sender.send(msg, record.getRegId(), 5);
             if (result.getMessageId() != null) {
                 log.info("Message sent to " + record.getRegId());
-                log.warning("Mesage: " + message + " sent from" + from.getLat() + " " + from.getLng() + "to " + record.getLat() + " " + record.getLng() + "IS: " + distance(from,record));
+                log.warning("Sent by: "+ user +"Mesage: " + message + " sent from" + from.getLat() + " " + from.getLng() + "to " + record.getLat() + " " + record.getLng() + "IS: " + distance(from,record));
                 String canonicalRegId = result.getCanonicalRegistrationId();
                 if (canonicalRegId != null) {
                     // if the regId changed, we have to update the datastore

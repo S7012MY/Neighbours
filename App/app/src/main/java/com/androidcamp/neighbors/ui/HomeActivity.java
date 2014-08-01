@@ -64,23 +64,7 @@ public class HomeActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        lh = new LocationHelper() {
-            @Override
-            public void onLocationChanged(Location location) {
 
-                super.onLocationChanged(location);
-                Toast.makeText(HomeActivity.this,"Location Inaccurate"+ location.getAccuracy(),Toast.LENGTH_LONG).show();
-                if(location.getAccuracy() > 300) {
-                    return;
-
-                }
-
-                 double lat = location.getLatitude(), lng = location.getLongitude();
-                 removeLocationUpdates();
-                new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient), lat, lng).execute(HomeActivity.this);
-            }
-        };
-        lh.onCreate(this);
         privateChatView = (TextView) findViewById(R.id.private_chat_list_title);
         sendToAll = (TextView) findViewById(R.id.send_all_neighbours);
         conversationList = (ListView) findViewById(R.id.conversation_list);
@@ -121,7 +105,7 @@ public class HomeActivity extends Activity implements
     @Override
     protected void onStart() {
         super.onStart();
-        lh.onStart();
+
         NeighbourApplication.sGoogleApiClient.connect();
     }
 
@@ -221,7 +205,26 @@ public class HomeActivity extends Activity implements
         Toast.makeText(this, "User is connected!" + Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient), Toast.LENGTH_LONG).show();
 
 
-        //sendMsg();
+
+        lh = new LocationHelper() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+                super.onLocationChanged(location);
+                Toast.makeText(HomeActivity.this,"Location Inaccurate"+ location.getAccuracy(),Toast.LENGTH_LONG).show();
+                if(location.getAccuracy() > 300) {
+                    return;
+
+                }
+
+                double lat = location.getLatitude(), lng = location.getLongitude();
+                removeLocationUpdates();
+                new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient), lat, lng).execute(HomeActivity.this);
+            }
+        };
+        lh.onCreate(this);
+        lh.onStart();
+
         //TODO use the token to retrieve user's basic profile
 
     }

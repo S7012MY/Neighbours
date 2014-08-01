@@ -3,7 +3,6 @@ package com.androidcamp.neighbors;
 import android.location.Location;
 
 import com.example.mymodule.neighborsbackend.messaging.Messaging;
-import com.google.android.gms.plus.Plus;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
