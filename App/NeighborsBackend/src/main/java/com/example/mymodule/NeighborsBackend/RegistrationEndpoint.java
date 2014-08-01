@@ -33,7 +33,10 @@ public class RegistrationEndpoint {
      */
     @ApiMethod(name = "register")
     public void registerDevice(@Named("regId") String regId,
-                               @Named("userId") String userId) {
+                               @Named("userId") String userId,
+                               @Named("lat") double latitude,
+                               @Named("lng") double longitude
+    ) {
         if(findRecord(regId) != null) {
             log.info("Device " + regId + " already registered, skipping register");
             return;
@@ -41,6 +44,8 @@ public class RegistrationEndpoint {
         RegistrationRecord record = new RegistrationRecord();
         record.setRegId(regId);
         record.setUserId(userId);
+        record.setLat(latitude);
+        record.setLng(longitude);
         ofy().save().entity(record).now();
     }
 

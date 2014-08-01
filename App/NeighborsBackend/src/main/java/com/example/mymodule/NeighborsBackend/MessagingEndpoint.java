@@ -48,6 +48,13 @@ public class MessagingEndpoint {
         Sender sender = new Sender(API_KEY);
         Message msg = new Message.Builder().addData("user", user).addData( "message",user+ ": " + message + "!" ).build();
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).list();
+
+        RegistrationRecord from;
+        for(RegistrationRecord record : records) {
+
+        }
+
+
         for(RegistrationRecord record : records) {
             Result result = sender.send(msg, record.getRegId(), 5);
             if (result.getMessageId() != null) {

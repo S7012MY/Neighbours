@@ -17,6 +17,9 @@ public class RegistrationRecord {
     @Index
     private String userId;
 
+    private double lat;
+    private double lng;
+
     // you can add more fields...
 
     public RegistrationRecord() {}
@@ -30,6 +33,12 @@ public class RegistrationRecord {
     }
 
     public String getUserId(){ return userId;}
+
+    public double getLat() {return lat;}
+    public double getLng() {return lng;}
+
+    public void setLat(double lat) {this.lat=lat;}
+    public void setLng(double lng) {this.lng=lng;}
 
     public void setUserId(String userId) { this.userId=userId; }
 }

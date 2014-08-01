@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidcamp.neighbors.GcmRegistrationAsyncTask;
 import com.androidcamp.neighbors.R;
@@ -56,6 +56,7 @@ public class HomeActivity extends Activity implements
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, BroadcastChatActivity.class);
+                intent.putExtra("user_id",Plus.AccountApi.getAccountName(mGoogleApiClient));
                 startActivity(intent);
             }
         });
@@ -190,7 +191,7 @@ public class HomeActivity extends Activity implements
 
 
         new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(mGoogleApiClient)).execute(this);
-        sendMsg();
+        //sendMsg();
         //TODO use the token to retrieve user's basic profile
 
     }
