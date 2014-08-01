@@ -30,13 +30,7 @@
             android:layout_weight="1"/>
 
     </LinearLayout>
-    <!--
-    <fragment
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/choose_bar"
-    />
-    -->
+
     <TextView
         android:id="@+id/send_all_neighbours"
         android:layout_width="match_parent"

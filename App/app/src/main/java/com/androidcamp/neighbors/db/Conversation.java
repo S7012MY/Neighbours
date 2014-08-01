@@ -15,6 +15,17 @@ public class Conversation implements ContentValuesTransformer{
     private String mReceiverId;
     private String mMessage;
 
+    public Conversation() {}
+
+    public Conversation( String mConversationID, Timestamp mTime, boolean mIsGroup, String mUserId, String mReceiverId, String mMessage) {
+        this.mConversationID = mConversationID;
+        this.mTime = mTime;
+        this.mIsGroup = mIsGroup;
+        this.mUserId = mUserId;
+        this.mReceiverId = mReceiverId;
+        this.mMessage = mMessage;
+    }
+
     public String getConversationID() {
         return mConversationID;
     }

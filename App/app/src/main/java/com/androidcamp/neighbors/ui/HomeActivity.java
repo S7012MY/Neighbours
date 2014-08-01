@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,12 @@ import android.widget.Toast;
 import com.androidcamp.neighbors.GcmRegistrationAsyncTask;
 import com.androidcamp.neighbors.LocationHelper;
 import com.androidcamp.neighbors.R;
+import com.androidcamp.neighbors.db.Conversation;
+import com.androidcamp.neighbors.db.Group;
+import com.androidcamp.neighbors.db.NeighboursContract;
+import com.androidcamp.neighbors.db.NeighboursDatabase;
+import com.androidcamp.neighbors.db.NeighboursDbHelper;
+import com.androidcamp.neighbors.db.User;
 import com.example.mymodule.neighborsbackend.messaging.Messaging;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -24,6 +31,8 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 
 public class HomeActivity extends Activity implements
@@ -250,8 +259,36 @@ public class HomeActivity extends Activity implements
 
     // add some raw data for testing
     private void insertRawData() {
-    }
-    public void onDisconnected() {
+    //public void onDisconnected() {
+        NeighboursDbHelper myHelper = new NeighboursDbHelper(getApplicationContext());
+        SQLiteDatabase myDatabase = myHelper.getWritableDatabase();
+
+
+        for(int i = 0; i < 10; i ++) {
+            User user = new User("id" + i, "user" + i, "mail" + i, i + "," +i, null, "F");
+            Group group = new Group("id" + i, "group" + i, "location" + i, null);
+            Timestamp tm = new Timestamp(new Date().getTime());
+            Conversation conversation = new Conversation("id" + i, tm, false, "user" +i, "user" + (((i -1) == 0)?2: i-1),"message" + i );
+
+            myDatabase.update(
+                    NeighboursContract.UserEntry.TABLE_NAME,
+                    user.toContentValues(),
+                    null,
+                    null);
+
+            myDatabase.update(
+                    NeighboursContract.GroupEntry.TABLE_NAME,
+                    group.toContentValues(),
+                    null,
+                    null);
+
+            myDatabase.update(
+                    NeighboursContract.ConversationEntry.TABLE_NAME,
+                    conversation.toContentValues(),
+                    null,
+                    null);
+        }
+        myDatabase.close();
     }
 
 }

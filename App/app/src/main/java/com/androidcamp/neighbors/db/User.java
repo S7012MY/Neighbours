@@ -14,6 +14,17 @@ public class User implements ContentValuesTransformer {
     private Bitmap mImage;
     private String mSex;
 
+    public User() {}
+
+    public User(String mUserID,String mName,String mMail,String mLocation, Bitmap mImage, String mSex) {
+        this.mUserID = mUserID;
+        this.mName = mName;
+        this.mMail = mMail;
+        this.mLocation = mLocation;
+        this.mImage = mImage;
+        this.mSex = mSex;
+    }
+
     public String getUserID() {
         return mUserID;
     }

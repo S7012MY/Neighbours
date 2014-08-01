@@ -16,6 +16,15 @@ public class Group implements ContentValuesTransformer{
     private String mLocation;
     private Bitmap mImage;
 
+    public Group() {}
+
+    public Group(String mGroupID, String mName, String mLocation, Bitmap mImage) {
+        this.mGroupID = mGroupID;
+        this.mName = mName;
+        this.mLocation = mLocation;
+        this.mImage = mImage;
+    }
+
     public String getGroupID() {
         return mGroupID;
     }
