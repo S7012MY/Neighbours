@@ -24,7 +24,7 @@
     <string name="send">Send</string>
 
     <string name="label_broadcast_chat">Broadcast chat</string>
-    <string name="broadcast_chat_title">Send message to everyone in the neighbourhood.</string>
+    <string name="broadcast_chat_title">Send message to everyone in the neighbourhood</string>
 
 
     <string name="label_private_chat">Private chat</string>

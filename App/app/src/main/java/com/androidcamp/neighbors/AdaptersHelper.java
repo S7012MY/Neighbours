@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.plus.Plus;
+
 import java.util.ArrayList;
 
 /**
@@ -22,7 +24,7 @@ public class AdaptersHelper {
 
     private static MessageListAdapter mPrivateAdapter;
 
-    //private static MessageListAdapter mGroupAdapters;
+    private static MessageListAdapter mPrivateChatListAdapter;
 
 
     public static MessageListAdapter getBroadcastAdapter() {
@@ -64,13 +66,13 @@ public class AdaptersHelper {
 
     public static class MessageListAdapter extends BaseAdapter {
 
-        private ArrayList<Message> messages;
+        protected ArrayList<Message> messages;
 
-        private Activity mActivity;
+        protected Activity mActivity;
 
-        private Intent mOnClickSendIntent;
+        protected Intent mOnClickSendIntent;
 
-        private MessageListAdapter(Activity activity, Intent onClickSendIntent) {
+        protected MessageListAdapter(Activity activity, Intent onClickSendIntent) {
             messages = new ArrayList<Message>();
             mActivity = activity;
             mOnClickSendIntent = onClickSendIntent;
@@ -99,16 +101,6 @@ public class AdaptersHelper {
                 convertView = mActivity.getLayoutInflater().inflate(R.layout.message_view, parent, false);
                 userName = (TextView) convertView.findViewById(R.id.user_name);
                 message  = (TextView) convertView.findViewById(R.id.message_text);
-                if (mOnClickSendIntent != null) {
-                    convertView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(mOnClickSendIntent);
-                            intent.putExtra("user_id", userName.getText().toString());
-                            mActivity.startActivity(intent);
-                        }
-                    });
-                }
             } else {
                 if (Integer.valueOf(position).equals(convertView.getTag())) {
                     return convertView;
@@ -117,13 +109,25 @@ public class AdaptersHelper {
                 message  = (TextView) convertView.findViewById(R.id.message_text);
             }
 
+            if (mOnClickSendIntent != null && userName != null
+                    && userName.equals(Plus.AccountApi.getAccountName(NeighbourApplication.sGoogleApiClient))) {
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mOnClickSendIntent);
+                        intent.putExtra("user_id", userName.getText().toString());
+                        mActivity.startActivity(intent);
+                    }
+                });
+            }
+
             userName.setText(messages.get(position).getUserName());
             message.setText(messages.get(position).getMessageText());
             message.setTag(Integer.valueOf(position));
             return convertView;
         }
 
-        private void addMessage(String user, String msg) {
+        protected void addMessage(String user, String msg) {
             messages.add(new Message(user, msg));
             mActivity.runOnUiThread(new Runnable() {
                 @Override
