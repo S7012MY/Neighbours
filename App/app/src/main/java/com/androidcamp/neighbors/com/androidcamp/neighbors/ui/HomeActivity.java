@@ -33,6 +33,7 @@ public class HomeActivity extends Activity implements
 
     /* Client used to interact with Google APIs. */
     private GoogleApiClient mGoogleApiClient;
+    //private PlusClient mPlusClient;
 
     /* A flag indicating that a PendingIntent is in progress and prevents
      * us from starting further intents.
@@ -62,8 +63,7 @@ public class HomeActivity extends Activity implements
                 }
             }
         });
-        new GcmRegistrationAsyncTask().execute(this);
-        sendMsg();
+
 
 
     }
@@ -117,7 +117,8 @@ public class HomeActivity extends Activity implements
         Messaging.Builder builder = new Messaging.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
         Messaging endpoint = builder.build();
                 try {
-                    endpoint.messagingEndpoint().sendMessage("sad").execute();
+                    //endpoint.messagingEndpoint().sendMessage("sad", Plus.AccountApi.getAccountName(mGoogleApiClient)).execute();
+                    endpoint.messagingEndpoint().sendPrivateMessage("private",Plus.AccountApi.getAccountName(mGoogleApiClient),Plus.AccountApi.getAccountName(mGoogleApiClient)).execute();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -168,8 +169,15 @@ public class HomeActivity extends Activity implements
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        mSignInClicked = false;
-        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
+        findViewById(R.id.sign_in_button).setVisibility(View.INVISIBLE);
+
+        Toast.makeText(this, "User is connected!" + Plus.AccountApi.getAccountName(mGoogleApiClient), Toast.LENGTH_LONG).show();
+
+
+        new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(mGoogleApiClient)).execute(this);
+        sendMsg();
+        //TODO use the token to retrieve user's basic profile
+
     }
 
     @Override
