@@ -171,6 +171,7 @@ public class HomeActivity extends Activity implements
     }
 
     public void onConnectionFailed(ConnectionResult result) {
+        mConnectionResult = result;
         new LoginDialog().show(getFragmentManager(), "HI");
     }
 
@@ -180,13 +181,12 @@ public class HomeActivity extends Activity implements
         if (loginDialog != null) {
             ((DialogFragment) loginDialog).dismiss();
         }
-        findViewById(R.id.sign_in_button).setVisibility(View.INVISIBLE);
 
         Toast.makeText(this, "User is connected!" + Plus.AccountApi.getAccountName(mGoogleApiClient), Toast.LENGTH_LONG).show();
 
 
         new GcmRegistrationAsyncTask(Plus.AccountApi.getAccountName(mGoogleApiClient)).execute(this);
-        //sendMsg();
+
         //TODO use the token to retrieve user's basic profile
 
     }

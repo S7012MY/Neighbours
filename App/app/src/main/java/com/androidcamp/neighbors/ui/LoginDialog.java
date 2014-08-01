@@ -15,7 +15,7 @@ public class LoginDialog extends DialogFragment {
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
         //blah blah blah
         LayoutInflater i = getActivity().getLayoutInflater();
-        View view = i.inflate(R.layout.activity_sign_up, null);
+        View view = i.inflate(R.layout.fragment_sign_up, null);
         // Now use view.FindViewById() to do what you want
         b.setView(view);
 

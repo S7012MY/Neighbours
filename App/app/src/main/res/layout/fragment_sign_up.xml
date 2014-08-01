@@ -10,7 +10,7 @@
 
     <TextView
     android:id="@+id/headLine"
-    android:text="Sign Up\n"
+    android:text="Sign Up"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
@@ -21,7 +21,8 @@
         android:id="@+id/sign_in_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/headLine"/>
+        android:layout_centerInParent="true"
+        android:layout_below="@id/headLine"/>
 
 
 </RelativeLayout>
